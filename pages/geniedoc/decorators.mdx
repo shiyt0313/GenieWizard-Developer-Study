@@ -1,0 +1,157 @@
+# ReactGenie Decorators
+
+> Developers can utilize various decorators to declare classes, variables, or functions when using **ReactGenie**. **ReactGenie** will then automatically process and serialize the related variables based on the developer's description. It will also automatically generate functions and LLM prompts to support multimodal input processing according to the provided description information.
+
+## @GenieClass
+
+GenieClass is a fundamental decorator for object-oriented programs. Classes with @GenieClass are automatically processed by **ReactGenie**. Developers can declare basic information about the class by adding a description for prompt generation to the class. For example:
+
+``` typescript filename="DateTime.ts" {3} copy
+import {GenieClass, HelperClass} from "reactgenie-lib"
+
+@GenieClass("Representing a date or time")
+export class DateTime extends HelperClass{
+  	//...
+}
+```
+
+Classes with the **@GenieClass** can create instances using the **CreateObject()** function, and the system will automatically call the **setup()** function to initialize the data. For more details, please refer to **ReactGenie Functions**.
+
+Considering the data types of different classes, GenieClass provides two types of classes that can be inherited: **DataClass** and **HelperClass**. <font color='red'>**Please avoid directly inheriting from GenieClass !**</font>
+
+
+
+### DataClass
+
+A DataClass is the basic unit for data management, and an instance of a DataClass can be viewed as a record in a database. The property in a DataClass can be a number, string, boolean, list, DataClass, or a HelperClass. 
+
+Each DataClass has a unique key (@GenieKey) for **ReactGenie** to manage. For each instance, information about the instance can be obtained using **GetObject(key)**. Here is an example for DataClass:
+
+```typescript filename="Order.ts" {3} copy
+import {GenieClass, DataClass, GenieKey, GenieProperty} from "reactgenie-lib"
+
+@GenieClass("An order")
+export class Order extends DataClass {
+    @GenieKey
+    @GenieProperty()
+    public id: string;
+    @GenieProperty("The items in the order.")
+    public items: OrderItem[] = [];
+    @GenieProperty("The date and time the order was placed.")
+    public placedTime: DateTime; //DateTime is a HelperClass
+  	//...
+  
+  	//functions...
+}
+```
+
+Complex data types in DataClass will be stored using HelperClass, otherwise they cannot be serialized and stored correctly.
+
+
+
+### HelperClass
+
+The HelperClass is an auxiliary data storage and processing type that depends on the DataClass. HelperClasses will not be stored directly in the database, but are serialized and deserialized as they are stored in and retrieved from the DataClass, helping the DataClass manage complex data types. The property in a DataClass can be a number, string, boolean, list, DataClass, or a HelperClass. 
+
+HelperClass has no key, but can also be instantiated using **CreatObject()**. Here is an example for HelperClass:
+
+```typescript filename="OrderItem.ts" {3} copy
+import {GenieClass, HelperClass} from "reactgenie-lib"
+
+@GenieClass("order item")
+export class OrderItem extends HelperClass {
+    @GenieProperty()
+    public foodItem: FoodItem; //Fooditem is a DataClass
+    @GenieProperty()
+    public quantity: int;
+    //...
+  
+  	//functions...
+}
+```
+
+
+
+## @GenieKey
+
+GenieKey is the identifier used by ReactGenie for data management, and each DataClass requires a GenieKey. Use @GenieKey to modify the property that is used as the key in the class, which can be used to get the instance after it is created. The GenieKey property should be pass to constructor while create a new instance.
+For example:
+
+```typescript filename="Counter.ts" {3} copy
+import {GenieClass, DataClass, GenieKey, GenieProperty} from "reactgenie-lib"
+
+@GenieClass("An Counter")
+export class Counter extends DataClass {
+    @GenieKey
+    @GenieProperty()
+    public id: string;
+    @GenieProperty()
+    public name: string;
+    @GenieProperty()
+    public quantity: int;
+
+  	//...
+  
+  	//functions...
+  	constructor({id, name, quantity}:{id:string, name:string, quantity:int}){
+			super({});
+      this.id = id
+      this.name = name;
+      this.quantity = quantity;
+    }
+  
+  	static setup(){
+      Counter.CreateObject({id:"1",name:"Coin", quantity:5});
+    }
+}
+```
+
+```typescript copy
+//Get instance
+Counter coin_count = Counter.GetObject({id:"1"});
+  //coin_count.name: "Coin"
+  //coin_count.quantity: 5
+```
+
+
+## @GenieProperty
+
+The GenieProperty modifier is utilized to alter properties that you wish to be accessed and managed by ReactGenie. Only properties with GenieProperty will be serialized by ReactGenie. If you wish not to serialize a property, you can add an underscore (`_`) to prevent it. All members modified with GenieProperty are serialized, stored, and used for multimodal interactions. Developers also have the option to add a description of the property for prompt generation. For instance,
+
+```typescript filename="Order.ts" {3} copy
+//...
+@GenieProperty()
+public _id: string; //id will not be access by voice input
+@GenieProperty("The items in the order.")
+public items: OrderItem[] = [];
+@GenieProperty("The date and time the order was placed.")
+public placedTime: DateTime; //DateTime is a HelperClass
+//...
+```
+
+
+
+
+## @GenieFunction
+
+All functions modified by GenieFunction can be called by ReactGenie automatically during multimodal interactions. Developers can add a description to the GenieFunction to state what this function is used for. 
+
+<font color='red'>**Please note that each GenieFunction should have a return value.**</font>
+
+```typescript filename="Order.ts" {3} copy
+@GenieFunction("Get the total price of the active order.")
+    getTotalPrice(): float {
+        // calculates the total price of the order
+      	// ...
+
+      return total;
+    }
+
+@GenieFunction("Add one item to the order.")
+    addItems({items}: {items: OrderItem[]}): Order {
+        // add item to the cart
+      	// ...
+      
+      return this;
+    }
+```

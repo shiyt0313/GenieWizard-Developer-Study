@@ -1,0 +1,39 @@
+# ReactGenie UI Interfaces
+
+ReactGenie supports multimodal applications by automatically executing relevant commands based on user input and rendering the UI to display results.
+
+## ModalityProvider
+
+To build an application with ReactGenie, you need to wrap the UI interface with the ModalityProvider. This ensures that ReactGenie has sufficient access. Developers must provide the necessary API key and prompt examples in the ModalityProvider.
+
+```typescript filename="App.tsx" {3} copy
+<ModalityProvider
+        examples={}
+        displayTranscript={true}
+        codexApiKey={ENV.OPENAI_API_KEY!}
+        codexApiBaseUrl={ENV.OPENAI_API_BASE_URL!}
+        azureSpeechRegion={ENV.AZURE_SPEECH_REGION!}
+        azureSpeechKey={ENV.AZURE_SPEECH_KEY!}
+        extraPrompt={
+          '// we are using voice recognition. so there may be errors. Try to think about words with similar sounds. For example "address" can actually be "add this".'
+        }
+      >
+
+          // add your own UI
+
+</ModalityProvider>
+```
+
+## GenieClassInterface
+
+To facilitate the automatic generation of UI for ReactGenie, we provide the GenieClassInterface. This interface is used to prompt ReactGenie on which interface to use for displaying the results. The typical results are an object or a list of objects. We recommend that developers write interfaces for these two types of results and declare them with GenieClassInterface to facilitate automatic UI generation.
+
+```typescript filename="TimerItemView.tsx" {3} copy
+export const TimerItemView = GenieClassInterface((timer: Timer) => 
+    `${timer.id} Timer`, "Timer")(TimerItemImpl);
+
+```
+
+```typescript filename="TimerList.tsx" {3} copy
+export const TimerList = GenieClassInterface("Timers", "Timer[]")(TimerListImpl)
+```

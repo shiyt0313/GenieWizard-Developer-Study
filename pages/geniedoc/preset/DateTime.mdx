@@ -1,0 +1,73 @@
+# DateTime
+
+> DateTime is a fundamental time type that inherits from the Helperclass. It is used to represent a specific point in time.
+
+## Properties
+
+```typescript copy
+    public year: number; // Represents the year of DateTime
+    public month: number; // Represents the month of DateTime
+    public day: number; // Represents the day of DateTime
+    public dayOfWeek: string; // Represents the day of the week of DateTime
+    public hour: number; // Represents the hour of DateTime
+    public minute: number; // Represents the minute of DateTime
+    public second: number; // Represents the second of DateTime
+
+    static sunday = 0;   // Represents Sunday
+    static monday = 1;   // Represents Monday
+    static tuesday = 2;  // Represents Tuesday
+    static wednesday = 3; // Represents Wednesday 
+    static thursday = 4;  // Represents Thursday
+    static friday = 5;    // Represents Friday
+    static saturday = 6;  // Represents Saturday
+```
+
+## Methods
+```typescript copy
+constructor({ year?: number, month?: number, day?: number, 
+hour?: number, minute?: number, second?: number}); // Constructs a new DateTime instance 
+                                                   // with the provided parameters
+```
+```typescript copy
+static today() : DateTime // Returns today's date as a DateTime object
+```
+```typescript copy
+createDatetime({ year?: number, month?: number, day?: number, 
+hour?: number, minute?: number, second?: number}):DateTime; // Creates a new DateTime object 
+                                                   // with the specified parameters
+```
+```typescript copy
+static fromString(data: string) // Converts a string representation of a DateTime 
+                                // into a DateTime object
+                                // Also support "today", "yesterday"
+```
+```typescript copy
+addDateOffset({ year?: number, month?: number, day?: number, 
+hour?: number, minute?: number, second?: number}); // Adds or subtracts (if value is negative) 
+                                                  // the specified time duration from the DateTime object
+```
+```typescript copy
+toString():string; // Converts the DateTime object to its string representation
+```
+```typescript copy
+getDate(): Date; // Returns the DateTime as a standard JavaScript Date object
+```
+
+## Prompt Examples
+
+```typescript 
+export const DateTimeExamples = [
+    {
+        user_utterance: "yesterday",
+        example_parsed: "DateTime.today().addDateOffset({day: -1})",
+    },
+    {
+        user_utterance: "tomorrow",
+        example_parsed: "DateTime.today().addDateOffset({day: 1})", 
+    },
+    {
+        user_utterance: "next week",
+        example_parsed: "DateTime.today().addDateOffset({day: 7})", 
+    }
+]
+```

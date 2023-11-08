@@ -1,0 +1,42 @@
+# Getting Started
+
+Here's a simple example built with **ReactGenie**:
+
+```jsx filename="demo.ts" copy
+import React, { Component } from 'react'
+import MyComponent from 'reactgenie-lib'
+
+class Example extends Component {
+  render() {
+    return <MyComponent />
+  }
+}
+```
+
+The **ReactGenie** library provides a counter example for multimodal interaction, which can be deployed as follows:
+
+1. Navigate to the `example` folder:
+
+    ```bash filename="run in terminal" {3} copy
+    cd example 
+    ```
+
+2. Replace the API key in `.env.example` with your own keys, then rename the file to `.env`.
+
+3. Install the necessary modules:
+
+    ```bash filename="run in terminal" {3} copy
+    npm install
+    ```
+
+4. Start the project with the following command:
+
+    ```bash filename="run in terminal" {3} copy
+    npx expo start --web
+    ```
+
+Alternatively, you can start the project by linking the library locally with this command:
+
+    ```bash filename="run in terminal" {3} copy
+    if [ -d "./node_modules/reactgenie-lib" ]; then rm -r ./node_modules/reactgenie-lib; fi && npm install --install-links && npx expo start --web
+    ```

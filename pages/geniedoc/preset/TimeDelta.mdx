@@ -1,0 +1,60 @@
+# TimeDelta
+
+> TimeDelta is a fundamental time type that inherits from the Helper class. It is used to represent a duration of time.
+
+## Properties
+
+```typescript copy
+    public hour: number;    // an integer representing hours
+    public minute: number;  // an integer representing minutes
+    public second: number;  // an integer representing seconds
+```
+
+## Methods
+
+```typescript copy
+// Constructs a TimeDelta Instance.
+// All arguments are optional, the default value is 0. 
+constructor({hour?: number, minute?: number, second?: number}); 
+```
+
+```typescript copy
+// Returns a new instance of TimeDelta.
+// Arguments are optional, defaults are 0 if not provided. 
+// Use to create a new instance of TimeDelta
+CreateTimeDelta({ year?: number, month?: number, day?: number, 
+hour?: number, minute?: number, second?: number}) : TimeDelta;
+```
+
+```typescript copy
+// Adds an offset to a TimeDelta instance.
+// All arguments are optional and are added to the corresponding properties of the instance
+addOffset({hour?: number, minute?: number, second?: number});
+```
+```typescript copy
+// Returns the total amount of time left in seconds.
+getLeftSecond():number;
+```
+```typescript copy
+// Returns a string representation of the TimeDelta instance in "HH:MM:SS" format.
+// If total time is more than 24 hours, it's represented as "HHH:MM:SS"
+toString():string; 
+```
+## Prompt Examples
+
+```typescript 
+export const TimeDeltaExamples = [
+  {
+    user_utterance: "20 minutes later",
+    example_parsed: "TimeDelta.CreateTimeDelta({minute: 20})",
+  },
+  {
+    user_utterance: "1 hour later",
+    example_parsed: "TimeDelta.CreateTimeDelta({hour: 1})",
+  },
+  {
+    user_utterance: "1 hour 20 minutes later",
+    example_parsed: "TimeDelta.CreateTimeDelta({hour: 1, minute: 20})",
+  },
+];
+```

@@ -1,0 +1,121 @@
+# ReactGenie Prompt Examples
+
+> Developers can provide examples within the class to enhance LLM's understanding of function calls and capabilities. These examples, provided by the developer, will automatically generate prompts for LLM. These prompts will then be used to produce automated responses for multimodal interactions.
+
+These examples should be included in the ModalityProvider. Also notice that <font color="red">**do not use CreateObject() in prompt examples**</font>
+
+```typescript filename="Counter.ts" {3} copy
+export const CounterExamples = [
+  {
+    user_utterance: "increment",
+    example_parsed: "Counter.Current().increment()",
+  },
+  {
+    user_utterance: "what is the count",
+    example_parsed: "Counter.Current().count",
+  },
+  {
+    user_utterance: "what is the count of potato",
+    example_parsed: 'Counter.GetCounter(name: "potato").count',
+  },
+  {
+    user_utterance: "increment potato counter",
+    example_parsed: 'Counter.GetCounter(name: "potato").increment()',
+  },
+  {
+    user_utterance: "show me all vegetables counters",
+    example_parsed: 'Counter.All().matching(field: .type, value: "vegetable")',
+  },
+];
+```
+```typescript filename="App.tsx" {3} copy
+<ModalityProvider
+        examples={CounterExamples}
+        //...>
+          
+       //...  
+</ModalityProvider>
+```
+
+## Array Features
+
+ReactGenie supports a variety of operations on arrays to facilitate multimodal interactions for developers. It provides unified access to the properties of all members.
+
+### Array Filtering
+ReactGenie supports a range of querying and filtering operations on arrays, including matching, sorting, containing, equating, and setting between values.
+
+#### matching(field, value)
+The matching() function queries the array members and returns the member whose field value matches the given value. The matching() function returns an array.
+```typescript copy
+{
+    user_utterance: "show me all vegetable counters",
+    example_parsed: 'Counter.All().matching(field: .type, value: "vegetable")',
+  },
+```
+
+#### equal(field, value)
+The equal() function queries the array members and returns the member whose field value equals the given value. The equal() function returns an array.
+```typescript copy
+{
+    user_utterance: "show me all vegetable counters",
+    example_parsed: 'Counter.All().equal(field: .type, value: "vegetable")',
+  },
+```
+
+#### between(field, from, to)
+The between() function queries the array members and returns the member whose field value is between the 'from' and 'to' values. The between() function returns an array. Note that the field passed to between() should have a static compare() function.
+```typescript filename="TimeDelta.ts" {3} copy
+static compare(a: TimeDelta, b: TimeDelta) {
+    console.log(a.getLeftSecond(), b.getLeftSecond());
+    return a.getLeftSecond() - b.getLeftSecond();
+  }
+```
+
+```typescript copy
+{
+        user_utterance: "show me timers less than 5 minutes",
+        example_parsed: "Timer.All().between(field: .delta, from: TimeDelta.CreateTimeDelta(), to: TimeDelta.CreateTimeDelta(hour: 0, minute: 5, second: 0))",
+    },
+```
+
+#### sort(field, ascending)
+The sort() function sorts the array members according to their field value. The sort() function returns an array. Note that the field passed to sort() should have a static compare() function.
+```typescript filename="TimeDelta.ts" {3} copy
+static compare(a: TimeDelta, b: TimeDelta) {
+    console.log(a.getLeftSecond(), b.getLeftSecond());
+    return a.getLeftSecond() - b.getLeftSecond();
+  }
+```
+```typescript copy
+{
+    user_utterance: "show me all timers with time increasing",
+    example_parsed: 'Counter.All().sort(field: .delta, ascending: true)',
+  },
+```
+
+#### contains(field, value)
+The contains() function queries the array members and returns the member whose field value contains the given value. The contains() function returns an array.
+```typescript copy
+{
+    user_utterance: "show me all burgers",
+    example_parsed: 'Food.All().contains(field: .name, value: "burger")',
+  },
+```
+### Access to Properties
+
+ReactGenie allows developers to access the properties and functions of list members during execution. This can be used directly to access the properties of the list members.
+
+```typescript copy
+{
+    user_utterance: "Show me all timer names",
+    example_parsed: 'Timer.All().name',
+  },
+  {
+    user_utterance: "Delete all meeting timers",
+    example_parsed: 'Timer.All().matching(field: .type, value: "meeting").DeleteTimer()',
+  },
+```
+
+
+
+
