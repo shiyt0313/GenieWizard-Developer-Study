@@ -291,7 +291,7 @@ export class Counter extends DataClass{
     public created: boolean;
 
     constructor({id, name, type, count = 0, created}:
-                    {id: string, name: string, type: string, count?: int, created:boolean}) {
+                    {id: string, name: string, type: string, count?: int, created: boolean}) {
         super({})
         this.id = id;
         this.name = name;
@@ -302,15 +302,15 @@ export class Counter extends DataClass{
 
     @GenieFunction()
     static CreateCounter({name, type, count=0, created}:
-                             {name:string, type:string, count?:int, created:boolean}): Counter {
+                             {name: string, type: string, count?: int, created: boolean}): Counter {
         const id = Counter.All().length.toString();
         return Counter.CreateObject({id: id, name: name, type: type, count: count, created: created})
     }
 
     static setup() {
-        Counter.CreateCounter({name:"apple", type:"fruit",created:true});
-        Counter.CreateCounter({name:"orange", type:"fruit", created:true});
-        Counter.CreateCounter({name:"potato", type:"vegetable", created:true});
+        Counter.CreateCounter({name: "apple", type: "fruit", created: true});
+        Counter.CreateCounter({name: "orange", type: "fruit", created: true});
+        Counter.CreateCounter({name: "potato", type: "vegetable", created: true});
     }
 
     @GenieFunction()
