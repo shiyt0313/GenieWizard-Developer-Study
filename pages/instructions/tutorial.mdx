@@ -338,7 +338,9 @@ If you’re interested, you can visit the ReactGenie documentation (https://reac
 
 ### 1.5 Add Examples and Test
 Finally, we need to add usage instances for your program to help ReactGenie correctly generate
-executable results using LLM. We need to provide examples of relevant function usage in each class.
+executable results using LLM. 
+We can provide examples of relevant function usage in each class. 
+<font color="red">You don't need to provide examples today, but you will learn some features about ReactGenie in this part.</font>
 
 Examples is a static list in GenieClass.
 ```typescript filename="Counter.ts" {3-19}
@@ -362,15 +364,6 @@ export class Counter extends GenieClass {
         example_parsed: 'Counter.Current().delete()',
     }]
 }
-```
-
-
-<font color="red">You only need to give out the name of the parameters in the cases, and do not wrap them with the curly brackets. </font>
-```typescript
-//Right
-"Counter.CreateCounter(type:\"fruit\", name:\"apple\")"
-//Wrong
-//"Counter.CreateCounter({type:\"fruit\", name:\"apple\"})"
 ```
 
 To help users achieve more interactions, ReactGenie supports some filtering operations on arrays.
@@ -413,39 +406,6 @@ This can be used directly to access the properties of the list members.
 ```
 Another function is built by ReactGenie to provide rich multimodal interactions is **Current()**.
 Current() is automatically created for all <font color="red">`DataClass`</font>es, and it returns the current object that is being interacted with.
-
-Make sure the examples cover these features:
-1. Current()
-```typescript
-{
-    user_utterance: "Increse this counter",
-    example_parsed: "Counter.Current().increment()",
-}
-```
-
-2. Filtering operations on list (e.g. matching)
-```typescript
-{
-    user_utterance: "show me all vegetables counters",
-    example_parsed: 'Counter.All().matching(field: .type, value: "vegetable")',
-}
-```
-3. Function call or Get properties on list
-```typescript
-{
-    user_utterance: "Delete all fruit counters",
-    example_parsed: 'Counter.All().matching(field: .type, value: "fruit").delete()',
-}
-```
-4. Functions user might use (e.g. delete())
-```typescript
-{
-    user_utterance: "Delete this counter",
-    example_parsed: 'Counter.Current().delete()',
-}
-```
-<font color="red">Please avoid testing one function with two similar utterance examples.</font>
-
 
 We have completed a simple multimodal interactive application based on ReactGenie. Congratulations!
 
